@@ -1,0 +1,34 @@
+# Build Your Own Radar — CLI
+
+## Objetivo
+
+Criar um CLI `radar-html` que aceita um arquivo CSV e gera um radar HTML standalone.
+
+## Setup
+
+```bash
+# Clonar o fork
+git clone https://github.com/SEU_USUARIO/build-your-own-radar
+cd build-your-own-radar
+
+# Instalar dependências
+npm install
+
+# Gerar o bundle standalone (necessário uma vez)
+npm run build:standalone
+
+# Registrar o CLI globalmente via symlink
+npm link
+```
+
+## Uso
+
+```bash
+radar-html meu-radar.csv
+```
+
+## Desenvolvimento local
+
+Com `npm link`, o comando `radar-html` aponta para `bin/radar-cli.js` via symlink.
+Qualquer alteração em `bin/radar-cli.js` reflete imediatamente, sem necessidade de rebuild.
+Se reconstruir o template (`npm run build:standalone`), o CLI já usa o novo bundle automaticamente.

@@ -6,6 +6,7 @@
   "scripts": {
     "build:dev": "webpack --mode development --config webpack.dev.js",
     "build:prod": "webpack --mode production --config webpack.prod.js",
+    "build:standalone": "webpack --mode production --config webpack.standalone.js",
     "dev": "webpack-dev-server --mode development --config webpack.dev.js",
     "test": "jest",
     "test:coverage": "jest --coverage",
@@ -14,6 +15,9 @@
     "lint-prettier:check": "eslint . && prettier --check .",
     "lint-prettier:fix": "eslint . --fix && prettier --write .",
     "quality": "npm run lint-prettier:check && npm run test:coverage"
+  },
+  "bin": {
+    "radar-html": "./bin/radar-cli.js"
   },
   "author": "Thoughtworks",
   "repository": {

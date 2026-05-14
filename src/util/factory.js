@@ -291,6 +291,30 @@ const JSONFile = function (url) {
   return self
 }
 
+const InlineDocument = function (csvString) {
+  var self = {}
+
+  self.build = function () {
+    try {
+      var data = d3.csvParse(csvString)
+      var columnNames = data.columns
+      delete data.columns
+      var contentValidator = new ContentValidator(columnNames)
+      contentValidator.verifyContent()
+      contentValidator.verifyHeaders()
+      var blips = _.map(data, new InputSanitizer().sanitize)
+      featureToggles.UIRefresh2022
+        ? plotRadarGraph('Tech Radar', blips, 'CSV File', [])
+        : plotRadar('Tech Radar', blips, 'CSV File', [])
+    } catch (exception) {
+      const invalidContentError = new InvalidContentError(ExceptionMessages.INVALID_CSV_CONTENT)
+      plotErrorMessage(featureToggles.UIRefresh2022 ? invalidContentError : exception, 'csv')
+    }
+  }
+
+  return self
+}
+
 const DomainName = function (url) {
   var search = /.+:\/\/([^\\/]+)/
   var match = search.exec(decodeURIComponent(url.replace(/\+/g, ' ')))
@@ -313,6 +337,12 @@ const Factory = function () {
   self.build = function () {
     if (!isValidConfig()) {
       plotError(new InvalidConfigError(ExceptionMessages.INVALID_CONFIG))
+      return
+    }
+
+    if (window.__RADAR_DATA__) {
+      plotLoading()
+      InlineDocument(window.__RADAR_DATA__).build()
       return
     }
 
