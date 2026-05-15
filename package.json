@@ -17,7 +17,8 @@
     "quality": "npm run lint-prettier:check && npm run test:coverage"
   },
   "bin": {
-    "radar-html": "./bin/radar-cli.js"
+    "radar-html": "./bin/radar-cli.js",
+    "radar-clean": "./bin/radar-clean.js"
   },
   "author": "Thoughtworks",
   "repository": {

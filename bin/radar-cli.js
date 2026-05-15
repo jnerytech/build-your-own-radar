@@ -4,10 +4,13 @@
 const fs = require('fs')
 const path = require('path')
 
-const [, , csvPath, outputPath = 'radar-output.html'] = process.argv
+const args = process.argv.slice(2)
+const clean = args.includes('--clean')
+const positional = args.filter((a) => !a.startsWith('--'))
+const [csvPath, outputPath = 'radar-output.html'] = positional
 
 if (!csvPath) {
-  console.error('Usage: radar-html <input.csv> [output.html]')
+  console.error('Usage: radar-html [--clean] <input.csv> [output.html]')
   process.exit(1)
 }
 
@@ -57,6 +60,18 @@ for (const imgFile of imageFiles) {
   const dataUri = `data:${mime};base64,${b64}`
   const escaped = imgFile.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
   html = html.replace(new RegExp(`/images/${escaped}`, 'g'), () => dataUri)
+}
+
+if (clean) {
+  const cleanCss = `<style>
+    #footer, .footer-content,
+    .print-radar-btn, .print-radar,
+    .buttons__wave-btn, .buttons__flamingo-btn,
+    .radar-title__logo,
+    .input-sheet__logo,
+    .hero-banner__title-text a[href*="thoughtworks"] { display: none !important; }
+  </style>`
+  html = html.replace('</head>', () => `${cleanCss}\n</head>`)
 }
 
 const outputAbsPath = path.resolve(outputPath)

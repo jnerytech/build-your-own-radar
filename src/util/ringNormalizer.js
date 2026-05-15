@@ -1,5 +1,6 @@
 function normalizeRingNameHoldToCaution(ring) {
-  if ((ring || '').trim().toLowerCase() === 'hold') {
+  const normalized = (ring || '').trim().toLowerCase()
+  if (normalized === 'hold' || normalized === 'caution') {
     return 'Caution'
   }
   return ring

@@ -455,7 +455,7 @@ function plotDisclaimer(content) {
     .append('p')
     .attr('class', 'landing-disclaimer-text show-disclaimer')
     .html(
-      '<b>Note:</b> The official Thoughtworks Technology Radar has updated the name of the outermost ring from “Hold” to “Caution”. The open-source Build Your Own Radar tool will now reflect this change and use the “Caution” label.',
+      'Both <b>”Hold”</b> and <b>”Caution”</b> are accepted as the outermost ring name and will be displayed as “Caution”.',
     )
 }
 
