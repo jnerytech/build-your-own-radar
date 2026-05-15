@@ -2,33 +2,78 @@
 
 ## Objetivo
 
-Criar um CLI `radar-html` que aceita um arquivo CSV e gera um radar HTML standalone.
+Criar um CLI `radar-html` e `radar-clean` que aceitam um arquivo CSV e geram um radar HTML standalone.
 
-## Setup
+## Instalação
 
 ```bash
-# Clonar o fork
-git clone https://github.com/SEU_USUARIO/build-your-own-radar
+# 1. Clonar o fork
+git clone https://github.com/jnerytech/build-your-own-radar
 cd build-your-own-radar
 
-# Instalar dependências
-npm install
+# 2. Instalar dependências (pula o binário do Cypress)
+CYPRESS_INSTALL_BINARY=0 npm install
 
-# Gerar o bundle standalone (necessário uma vez)
+# 3. Gerar o bundle standalone (necessário uma vez)
 npm run build:standalone
 
-# Registrar o CLI globalmente via symlink
+# 4. Registrar os CLIs globalmente via symlink
 npm link
 ```
+
+> **Windows (WSL)**: o `npm` do WSL pode resolver para o Node.js do Windows, quebrando o `npm install`
+> (erro `UNC paths are not supported` ou `cmd.exe` sendo invocado). Instale o Node nativo no WSL primeiro:
+>
+> ```bash
+> # Instalar nvm
+> curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
+> source ~/.nvm/nvm.sh
+>
+> # Instalar Node 22 dentro do WSL
+> nvm install 22
+> nvm use 22
+>
+> # Verificar que está usando o Node do WSL (deve retornar ~/.nvm/..., não /mnt/c/...)
+> which node
+> ```
+>
+> Depois repita os passos de instalação acima.
+>
+> Para abrir o HTML gerado no browser do Windows:
+> ```bash
+> explorer.exe radar-output.html
+> ```
 
 ## Uso
 
 ```bash
+# HTML padrão (com branding Thoughtworks)
 radar-html meu-radar.csv
+
+# HTML limpo (sem logo, footer, botão de print)
+radar-clean meu-radar.csv
+
+# Especificar arquivo de saída
+radar-html meu-radar.csv output.html
+radar-clean meu-radar.csv output.html
+
+# Flag equivalente ao radar-clean
+radar-html --clean meu-radar.csv
 ```
+
+## Formato do CSV
+
+```csv
+name,ring,quadrant,isNew,description
+"React","Adopt","Languages & Frameworks",TRUE,"Descrição aqui"
+```
+
+- **ring**: Adopt | Trial | Assess | Caution (ou Hold — ambos aceitos)
+- **quadrant**: Languages & Frameworks | Tools | Platforms | Techniques
+- **isNew**: TRUE | FALSE
 
 ## Desenvolvimento local
 
-Com `npm link`, o comando `radar-html` aponta para `bin/radar-cli.js` via symlink.
-Qualquer alteração em `bin/radar-cli.js` reflete imediatamente, sem necessidade de rebuild.
+Com `npm link`, os comandos apontam para `bin/radar-cli.js` e `bin/radar-clean.js` via symlink.
+Qualquer alteração nos arquivos reflete imediatamente, sem necessidade de re-link.
 Se reconstruir o template (`npm run build:standalone`), o CLI já usa o novo bundle automaticamente.

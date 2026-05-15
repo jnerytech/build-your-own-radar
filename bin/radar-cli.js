@@ -4,13 +4,52 @@
 const fs = require('fs')
 const path = require('path')
 
+const { version } = require('../package.json')
+
 const args = process.argv.slice(2)
 const clean = args.includes('--clean')
+
+if (args.includes('--version') || args.includes('-v')) {
+  console.log(version)
+  process.exit(0)
+}
+
+if (args.includes('--help') || args.includes('-h')) {
+  console.log(`
+radar-html v${version}
+
+Generate a standalone HTML radar from a CSV file.
+
+Usage:
+  radar-html [options] <input.csv> [output.html]
+  radar-clean [options] <input.csv> [output.html]
+
+Options:
+  --clean       Remove Thoughtworks branding, footer and print button
+  --version, -v Show version
+  --help,    -h Show this help
+
+CSV format:
+  name,ring,quadrant,isNew,description
+
+  ring     : Adopt | Trial | Assess | Caution | Hold
+  quadrant : Languages & Frameworks | Tools | Platforms | Techniques
+  isNew    : TRUE | FALSE
+
+Examples:
+  radar-html meu-radar.csv
+  radar-clean meu-radar.csv output.html
+  radar-html --clean meu-radar.csv
+`)
+  process.exit(0)
+}
+
 const positional = args.filter((a) => !a.startsWith('--'))
 const [csvPath, outputPath = 'radar-output.html'] = positional
 
 if (!csvPath) {
   console.error('Usage: radar-html [--clean] <input.csv> [output.html]')
+  console.error('       radar-html --help for more information')
   process.exit(1)
 }
 
